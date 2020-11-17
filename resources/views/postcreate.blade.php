@@ -12,7 +12,7 @@
             <label>Description</label>
             <textarea name="description" class="form-control"></textarea>
         </div>
-        <input type="submit" value="Confirm" class="btn btn-primary">
+        <input type="submit" value="Create" class="btn btn-primary">
         <input type="submit" value="Clear" class="btn btn-primary">
     </form>
 </div>

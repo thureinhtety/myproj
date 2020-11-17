@@ -28,4 +28,7 @@ Route::get('/home/{id}', 'PostsController@detail');
 Route::get('/create','PostsController@add');
 Route::post('/create','PostsController@create');
 
-Route::get('/delete/{id}','PostsController@delete');
+Route::delete('/delete/{id}','PostsController@delete');
+
+Route::get('/edit/{id}','PostsController@edit');
+Route::put('/update/{id}','PostsController@update');

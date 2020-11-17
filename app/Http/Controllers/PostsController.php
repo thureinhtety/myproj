@@ -20,7 +20,7 @@ class PostsController extends Controller
     {
         $data = Posts::find($id);
         return view('home', [
-            'postdetail' => $data
+            'postsdetail' => $data
         ]);
     }
     public function delete($id)
@@ -38,8 +38,23 @@ class PostsController extends Controller
         $posts = new Posts();
         $posts->title = request()->title;
         $posts->description = request()->description;
-        $posts->create_user_id = Auth::id();
-        $posts->updated_user_id = Auth::id();
+        $posts->create_user_id = auth()->id();
+        $posts->updated_user_id = auth()->id();
+        $posts->save();
+        return redirect('home');
+    }
+    public function edit($id)
+    {
+        $data = Posts::find($id);
+        return view('postedit', ['post' => $data]);
+    }
+    public function update($id)
+    {
+        $posts = Posts::find($id);
+        $posts->title = request()->title;
+        $posts->description = request()->description;
+        $posts->create_user_id = auth()->id();
+        $posts->updated_user_id = auth()->id();
         $posts->save();
         return redirect('home');
     }

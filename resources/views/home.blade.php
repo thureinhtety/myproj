@@ -39,12 +39,18 @@
 
                     @foreach($posts as $post)
                     <tr>
-                        <td><a href="{{ url("/home/$post->id") }}" data-toggle="modal" data-target="#exampleModalCenter">{{$post->title}}</a></td>
+                        <td><a href onclick="showDetail({{json_encode($post)}})">{{$post->title}}</a></td>
                         <td>{{$post->description}}</td>
                         <td>User-{{$post->create_user_id}}</td>
                         <td>{{$post->created_at}}</td>
-                        <td><a href="#">Edit</a></td>
-                        <td><a href="{{ url("/delete/$post->id") }}">Delete</a></td>
+                        <td><a href="{{url("/edit/$post->id")}}">Edit</a></td>
+                        <td>
+                            <form method="post" onsubmit="return confirm('Are you sure to delete this post?')" action="{{ url("/delete/$post->id") }}">
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -112,4 +118,9 @@
     </div>
 </div>
 </div>
+<script>
+    function showDetail(post) {
+        alert(post.title+"\n"+post.description+"\n"+post.status);
+    }
+</script>
 @endsection

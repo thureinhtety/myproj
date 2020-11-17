@@ -1,4 +1,4 @@
 @extends('layouts.app')
 @section('content')
-<h1>{{$postdetail->title}}</h1>
+<h1>hello/h1>
 @endsection
