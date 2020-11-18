@@ -4,11 +4,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-            @endif
             <h2>Post List</h2>
             <div class="mb-2">
                 <form action="/" method="GET">
@@ -39,7 +34,7 @@
 
                     @foreach($posts as $post)
                     <tr>
-                        <td><a href onclick="showDetail({{json_encode($post)}})">{{$post->title}}</a></td>
+                        <td><a href onclick="showDetail({{json_encode($post)}})" data-toggle="modal" data-target="#exampleModal">{{$post->title}}</a></td>
                         <td>{{$post->description}}</td>
                         <td>User-{{$post->create_user_id}}</td>
                         <td>{{$post->created_at}}</td>
@@ -56,12 +51,11 @@
                 </tbody>
             </table>
             {{ $posts->links()}}
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Post Detail</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Post Detail</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -72,37 +66,37 @@
                                     <tr>
                                         <td>1</td>
                                         <td>title</td>
-                                        <td></td>
+                                        <td id="title"></td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
                                         <td>description</td>
-                                        <td></td>
+                                        <td id="description"></td>
                                     </tr>
                                     <tr>
                                         <td>3</td>
                                         <td>status</td>
-                                        <td></td>
+                                        <td id="status"></td>
                                     </tr>
                                     <tr>
                                         <td>4</td>
                                         <td>created at</td>
-                                        <td></td>
+                                        <td id="ca"></td>
                                     </tr>
                                     <tr>
                                         <td>5</td>
                                         <td>created user</td>
-                                        <td></td>
+                                        <td id="cu"></td>
                                     </tr>
                                     <tr>
                                         <td>6</td>
                                         <td>last update at</td>
-                                        <td></td>
+                                        <td id="ua"></td>
                                     </tr>
                                     <tr>
                                         <td>7</td>
                                         <td>updated user</td>
-                                        <td></td>
+                                        <td id="uu"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -116,11 +110,25 @@
             </div>
         </div>
     </div>
-</div>
-</div>
-<script>
-    function showDetail(post) {
-        alert(post.title+"\n"+post.description+"\n"+post.status);
-    }
-</script>
-@endsection
+
+
+    <script>
+        function showDetail(post) {
+            document.getElementById("title").innerHTML = post.title;
+            document.getElementById("description").innerHTML = post.description;
+            document.getElementById("status").innerHTML = post.status;
+            document.getElementById("ca").innerHTML = setDate(post.created_at);
+            document.getElementById("cu").innerHTML = post.create_user_id;
+            document.getElementById("ua").innerHTML = setDate(post.updated_at);
+            document.getElementById("uu").innerHTML = post.updated_user_id;
+        }
+        function setDate(date){
+            var timestamp = new Date(date).getTime();
+            var todate = new Date(timestamp).getDate();
+            var tomonth = new Date(timestamp).getMonth() + 1;
+            var toyear = new Date(timestamp).getFullYear();
+            var original_date = toyear + '-' + tomonth + '-' + todate;
+            return original_date;
+        }
+    </script>
+    @endsection
