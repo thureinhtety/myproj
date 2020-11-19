@@ -7,7 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use App\Posts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Imports\PostsImport;
+use Excel;
+use Illuminate\Support\Facades\App;
+use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
+use App\User;
+use PhpOffice\PhpSpreadsheet\Chart\Title;
 
+use function GuzzleHttp\Promise\all;
 
 class PostsController extends Controller
 {
@@ -27,7 +34,7 @@ class PostsController extends Controller
     }
     public function add()
     {
-        return view('postcreate');
+        return view('posts.postcreate');
     }
     public function create()
     {
@@ -41,26 +48,27 @@ class PostsController extends Controller
     }
     public function createConfirm(){
         request()->validate([
-            'title'=>'required',
-            'description'=>['required','max:255']
+            'title'=>'required|unique:posts,title',
+            'description'=>'required|max:255'
         ]);
         $posts = new Posts();
         $posts->title = request()->title;
         $posts->description = request()->description;
         Session::put('title', $posts->title);
         Session::put('description', $posts->description);
-        return view('postcreateconfirm',['postconfirm'=>$posts]);
+        return view('posts.postcreateconfirm',['postconfirm'=>$posts]);
     }
     public function edit($id)
     {
         $data = Posts::find($id);
-        return view('postedit', ['post' => $data]);
+        return view('posts.postedit', ['post' => $data]);
     }
     public function update($id)
     {
         $posts = Posts::find($id);
         $posts->title = Session::get('title');
         $posts->description = Session::get('description');
+        $posts->status = Session::get('status');
         $posts->updated_user_id = auth()->id();
         $posts->save();
         return redirect('home');
@@ -68,7 +76,7 @@ class PostsController extends Controller
     public function updateConfirm($id){
         request()->validate([
             'title'=>'required',
-            'description'=>['required','max:255']
+            'description'=>'required|max:255'
         ]);
         $posts = Posts::find($id);
         $posts->title = request()->title;
@@ -76,6 +84,19 @@ class PostsController extends Controller
         $posts->status = request()->status;
         Session::put('title', $posts->title);
         Session::put('description', $posts->description);
-        return view('posteditconfirm',['postconfirm'=>$posts]);
+        Session::put('status', $posts->status);
+        return view('posts.posteditconfirm',['postconfirm'=>$posts]);
+    }
+    public function search(){
+        $posts = new Posts();
+        $posts->post = request()->post;
+        return view('posts',['postsearch'=>$posts]);
+    }
+    public function upload(){
+        return view('fileupload');
+    }
+    public function import(Request $request){
+        Excel::import(new PostsImport,$request->csvfile);
+        return redirect('home');
     }
 }

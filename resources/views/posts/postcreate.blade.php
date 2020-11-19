@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     <h2>Create Post</h2>
-    <form method="get" action="{{url("/confirm")}}">
+    <form method="get" action="{{url("/posts/confirm")}}">
         @csrf
         <div class="form-group">
             <label>Title</label>

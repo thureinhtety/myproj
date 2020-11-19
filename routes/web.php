@@ -22,15 +22,19 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/home', 'PostsController@index');
+Route::get('/posts', 'PostsController@search');
 
-Route::get('/create','PostsController@add');
-Route::post('/create','PostsController@create');
-Route::get('/confirm','PostsController@createConfirm');
+Route::get('/posts/search','PostsController@search');
 
-Route::delete('/delete/{id}','PostsController@delete');
+Route::get('/posts/create','PostsController@add');
+Route::post('/posts/create','PostsController@create');
+Route::get('/posts/confirm','PostsController@createConfirm');
 
-Route::get('/edit/{id}','PostsController@edit');
-Route::put('/update/{id}','PostsController@update');
-Route::get('/update/{id}','PostsController@updateConfirm');
+Route::delete('/posts/delete/{id}','PostsController@delete');
 
+Route::get('/posts/edit/{id}','PostsController@edit');
+Route::put('/posts/update/{id}','PostsController@update');
+Route::get('/posts/update/{id}','PostsController@updateConfirm');
 
+Route::get('/upload','PostsController@upload');
+Route::post('/import','PostsController@import');

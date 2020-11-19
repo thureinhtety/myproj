@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     <h2>Update Post</h2>
-    <form method="get" action="{{ url("/update/$post->id") }}">
+    <form method="get" action="{{ url("/posts/update/$post->id") }}">
         @csrf
         <div class="form-group">
             <label>Title</label>
@@ -20,7 +20,7 @@
         </div>
         <div>
             <label>Status</label>
-            <input type="checkbox" name="status" checked>
+            <input type="checkbox" name="status" value="{{$post->status}}" <?php echo ($post->status)==1 ? 'checked' : '' ;?>>
         </div>
         <input type="submit" value="Confirm" class="btn btn-primary">
         <input type="reset" value="Clear" class="btn btn-primary">
