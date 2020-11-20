@@ -11,7 +11,7 @@
                     <input type="submit" value="Search" class="btn btn-primary mr-3">
                     <a class="btn btn-primary mr-3" href="/posts/create" role="button">Add</a>
                     <a class="btn btn-primary mr-3" href="/upload" role="button">Upload</a>
-                    <a class="btn btn-primary mr-3" href="#" role="button">Download</a>
+                    <a class="btn btn-primary mr-3" href="/download" role="button">Download</a>
                 </form>
             </div>
             <table class="table table-bordered">

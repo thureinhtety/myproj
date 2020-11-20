@@ -20,7 +20,7 @@
         </div>
         <div>
             <label>Status</label>
-            <input type="checkbox" name="status" value="{{$post->status}}" <?php echo ($post->status)==1 ? 'checked' : '' ;?>>
+            <input type="checkbox" name="status" value="{{$post->status}}" <?php echo ($post->status) == 1 ? 'checked' : ''; ?>>
         </div>
         <input type="submit" value="Confirm" class="btn btn-primary">
         <input type="reset" value="Clear" class="btn btn-primary">

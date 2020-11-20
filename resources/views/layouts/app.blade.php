@@ -26,9 +26,9 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                <a href="#" style="margin-right: 10px;">Users</a>
+                <a href="/news" style="margin-right: 10px;">Users</a>
                 <a href="#" style="margin-right: 10px;">User</a>
-                <a href="#">Posts</a>
+                <a href="/home">Posts</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>

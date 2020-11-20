@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PostsExport;
 use Illuminate\Support\Facades\Auth;
 
 use App\Posts;
@@ -25,12 +26,12 @@ class PostsController extends Controller
             'posts' => $data
         ]);
     }
-    
+
     public function delete($id)
     {
         $data = Posts::find($id);
         $data->delete();
-        return redirect('home');
+        return back();
     }
     public function add()
     {
@@ -46,17 +47,18 @@ class PostsController extends Controller
         $posts->save();
         return redirect('home');
     }
-    public function createConfirm(){
+    public function createConfirm()
+    {
         request()->validate([
-            'title'=>'required|unique:posts,title',
-            'description'=>'required|max:255'
+            'title' => 'required|unique:posts,title',
+            'description' => 'required|max:255'
         ]);
         $posts = new Posts();
         $posts->title = request()->title;
         $posts->description = request()->description;
         Session::put('title', $posts->title);
         Session::put('description', $posts->description);
-        return view('posts.postcreateconfirm',['postconfirm'=>$posts]);
+        return view('posts.postcreateconfirm', ['postconfirm' => $posts]);
     }
     public function edit($id)
     {
@@ -73,10 +75,11 @@ class PostsController extends Controller
         $posts->save();
         return redirect('home');
     }
-    public function updateConfirm($id){
+    public function updateConfirm($id)
+    {
         request()->validate([
-            'title'=>'required',
-            'description'=>'required|max:255'
+            'title' => 'required',
+            'description' => 'required|max:255'
         ]);
         $posts = Posts::find($id);
         $posts->title = request()->title;
@@ -85,18 +88,32 @@ class PostsController extends Controller
         Session::put('title', $posts->title);
         Session::put('description', $posts->description);
         Session::put('status', $posts->status);
-        return view('posts.posteditconfirm',['postconfirm'=>$posts]);
+        return view('posts.posteditconfirm', ['postconfirm' => $posts]);
     }
-    public function search(){
-        $posts = new Posts();
-        $posts->post = request()->post;
-        return view('posts',['postsearch'=>$posts]);
+    public function search()
+    {
+        $data = new Posts();
+        $data->post = request()->post;
+        //  $name=User::where("name",$data->post)->get('id');
+        //  $posts=User::find($name);
+        $search = Posts::where("title", $data->post)->orwhere("description", "like", "%" . $data->post . "%")->paginate(3);
+        return view('home', ['posts' => $search]);
     }
-    public function upload(){
+
+
+    public function upload()
+    {
         return view('fileupload');
     }
-    public function import(Request $request){
-        Excel::import(new PostsImport,$request->csvfile);
+    public function import(Request $request)
+    {
+        request()->validate([
+            'import_file' => 'required|file|mimes:xlsx'
+        ]);
+        Excel::import(new PostsImport,$request->import_file);
         return redirect('home');
+    }
+    public function export(){
+        return Excel::download(new PostsExport,"posts.csv");
     }
 }

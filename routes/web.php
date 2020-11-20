@@ -38,3 +38,10 @@ Route::get('/posts/update/{id}','PostsController@updateConfirm');
 
 Route::get('/upload','PostsController@upload');
 Route::post('/import','PostsController@import');
+Route::get('/download','PostsController@export');
+
+Route::get('/news','NewsController@index')->name('news');
+Route::delete('/news/delete/{id}','NewsController@delete');
+
+Route::get('/news/create','NewsController@add');
+Route::get('/news/confirm','NewsController@createConfirm');
