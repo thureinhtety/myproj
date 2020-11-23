@@ -14,92 +14,90 @@ use Illuminate\Support\Facades\App;
 use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
 use App\User;
 use PhpOffice\PhpSpreadsheet\Chart\Title;
+use App\Contracts\Services\Posts\PostsServiceInterface;
+use Illuminate\Support\Facades\Validator;
 
 use function GuzzleHttp\Promise\all;
 
 class PostsController extends Controller
 {
+    public function __construct(PostsServiceInterface $postsService)
+    {
+        $this->postsService = $postsService;
+    }
     public function index()
     {
-        $data = Posts::paginate(5);
-        return view('home', [
-            'posts' => $data
-        ]);
+        $data = $this->postsService->getPostsList();
+
+        return view('home', ['posts' => $data,]);
     }
 
     public function delete($id)
     {
-        $data = Posts::find($id);
-        $data->delete();
-        return back();
+        $this->postsService->delete($id);
+        return redirect('home');
     }
+
     public function add()
     {
         return view('posts.postcreate');
     }
     public function create()
     {
-        $posts = new Posts();
-        $posts->title = Session::get('title');
-        $posts->description = Session::get('description');
-        $posts->create_user_id = auth()->id();
-        $posts->updated_user_id = auth()->id();
-        $posts->save();
+        $this->postsService->create();
         return redirect('home');
     }
-    public function createConfirm()
+    public function createConfirm(Request $request)
     {
-        request()->validate([
+        $validator = $this->validatePosts($request);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $postconfirm = $this->postsService->createConfirm($request);
+        return view('posts.postcreateconfirm', compact('postconfirm'));
+    }
+    public function validatePosts(Request $request)
+    {
+        $rule = [
             'title' => 'required|unique:posts,title',
             'description' => 'required|max:255'
-        ]);
-        $posts = new Posts();
-        $posts->title = request()->title;
-        $posts->description = request()->description;
-        Session::put('title', $posts->title);
-        Session::put('description', $posts->description);
-        return view('posts.postcreateconfirm', ['postconfirm' => $posts]);
+        ];
+        return Validator::make($request->all(), $rule);
     }
+
     public function edit($id)
     {
-        $data = Posts::find($id);
+        $data = $this->postsService->edit($id);
         return view('posts.postedit', ['post' => $data]);
     }
     public function update($id)
     {
-        $posts = Posts::find($id);
-        $posts->title = Session::get('title');
-        $posts->description = Session::get('description');
-        $posts->status = Session::get('status');
-        $posts->updated_user_id = auth()->id();
-        $posts->save();
+        $this->postsService->update($id);
         return redirect('home');
     }
-    public function updateConfirm($id)
+    public function updateConfirm(Request $request, $id)
     {
-        request()->validate([
+        $validator = $this->validateUpdate($request);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $postconfirm = $this->postsService->updateConfirm($request, $id);
+        return view('posts.posteditconfirm', compact('postconfirm'));
+    }
+    public function validateUpdate(Request $request)
+    {
+        $rule = [
             'title' => 'required',
             'description' => 'required|max:255'
-        ]);
-        $posts = Posts::find($id);
-        $posts->title = request()->title;
-        $posts->description = request()->description;
-        $posts->status = request()->status;
-        Session::put('title', $posts->title);
-        Session::put('description', $posts->description);
-        Session::put('status', $posts->status);
-        return view('posts.posteditconfirm', ['postconfirm' => $posts]);
-    }
-    public function search()
-    {
-        $data = new Posts();
-        $data->post = request()->post;
-        //  $name=User::where("name",$data->post)->get('id');
-        //  $posts=User::find($name);
-        $search = Posts::where("title", $data->post)->orwhere("description", "like", "%" . $data->post . "%")->paginate(3);
-        return view('home', ['posts' => $search]);
+        ];
+        return Validator::make($request->all(), $rule);
     }
 
+    public function search()
+    {
+        $search = $this->postsService->search();
+        return view('home', ['posts' => $search]);
+    }
 
     public function upload()
     {
@@ -107,13 +105,23 @@ class PostsController extends Controller
     }
     public function import(Request $request)
     {
-        request()->validate([
-            'import_file' => 'required|file|mimes:xlsx'
-        ]);
-        Excel::import(new PostsImport,$request->import_file);
+        $validator = $this->validateImport($request);
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+        $this->postsService->import($request);
         return redirect('home');
     }
-    public function export(){
-        return Excel::download(new PostsExport,"posts.csv");
+    public function validateImport(Request $request)
+    {
+        $rules = [
+            'import_file' => 'required|file|mimes:xlsx'
+        ];
+        return Validator::make($request->all(), $rules);
+    }
+
+    public function export()
+    {
+        return  $this->postsService->export();
     }
 }

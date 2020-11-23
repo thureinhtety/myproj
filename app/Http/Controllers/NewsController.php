@@ -4,24 +4,32 @@ namespace App\Http\Controllers;
 
 use App\News;
 use Illuminate\Http\Request;
+use App\Contracts\Services\News\NewsServiceInterface;
 
 class NewsController extends Controller
 {
-    public function index(){
-        $data = News::paginate(5);
-        return view('news.news', [
-            'news' => $data
-        ]);
+    public function __construct(NewsServiceInterface $newsService)
+    {
+        $this->newsService = $newsService;
     }
-    public function delete($id){
-        $data = News::find($id);
-        $data->delete();
+    public function index()
+    {
+        $data = $this->newsService->getNewsList();
+        return view('news.news', ['news' => $data]);
+    }
+
+    public function delete($id)
+    {
+        $this->newsService->delete($id);
         return back();
     }
-    public function add(){
+    
+    public function add()
+    {
         return view('news.newscreate');
     }
-    public function createConfirm(){
+    public function createConfirm()
+    {
         return view('news.newscreateconfirm');
     }
 }
