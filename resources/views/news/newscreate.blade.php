@@ -4,31 +4,31 @@
     <h2>Create User</h2>
     <form method="get" action="{{url("/news/confirm")}}">
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Name</label>
+            <label class="col-sm-2 col-form-label">Name</label><span class="required text-danger">*</span>
             <div class="col-sm-5">
                 <input type="text" class="form-control" name="name">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Email Address</label>
+            <label class="col-sm-2 col-form-label">Email Address</label><span class="required text-danger">*</span>
             <div class="col-sm-5">
                 <input type="text" class="form-control" name="email">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Password</label>
+            <label class="col-sm-2 col-form-label">Password</label><span class="required text-danger">*</span>
             <div class="col-sm-5">
                 <input type="password" class="form-control" name="password">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Confirm Password</label>
+            <label class="col-sm-2 col-form-label">Confirm Password</label><span class="required text-danger">*</span>
             <div class="col-sm-5">
                 <input type="password" class="form-control" name="confirmpassword">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Type</label>
+            <label class="col-sm-2 col-form-label">Type</label><span class="required text-danger">*</span>
             <div class="form-group col-sm-5">
                 <select id="inputState" class="form-control">
                     <option selected></option>
@@ -57,7 +57,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Profile</label>
+            <label class="col-sm-2 col-form-label">Profile</label><span class="required text-danger">*</span>
             <div class="btn btn btn-outline-secondary col-sm-5">
                 <input type="file" class="form-control-file">
             </div>

@@ -1,21 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-.first{
-    width:1000px;
-}
-</style>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-15">
             <h2>User List</h2>
             <div class="mb-2">
-                <form action="/posts" method="GET">
+                <form action="{{url("/news/search")}}" method="GET">
                     <input type="text" name="name" class="mr-3" placeholder="Name">
-                    <input type="text" name="name" class="mr-3" placeholder="Email">
-                    <input type="text" name="name" class="mr-3" placeholder="Created From">
-                    <input type="text" name="name" class="mr-3" placeholder="Created To">
+                    <input type="text" name="email" class="mr-3" placeholder="Email">
+                    <input type="text" name="created_from" class="mr-3" placeholder="Created From">
+                    <input type="text" name="created_to" class="mr-3" placeholder="Created To">
                     <input type="submit" value="Search" class="btn btn-primary mr-3">
                     <a class="btn btn-primary mr-3" href="/news/create" role="button">Add</a>
                 </form>
@@ -29,7 +24,7 @@
                         <th scope="col">Phone</th>
                         <th scope="col">Birth Date</th>
                         <th scope="col">Address</th>
-                        <th scope="col">Creaded Date</th>
+                        <th scope="col">Created Date</th>
                         <th scope="col">Updated Date</th>
                         <th scope="col"></th>
                     </tr>

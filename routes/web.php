@@ -24,9 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home', 'PostsController@index');
 Route::get('/posts', 'PostsController@search');
 
-Route::get('/posts/search','PostsController@search');
-
-Route::get('/posts/create','PostsController@add');
+Route::get('/posts/create','PostsController@showCreate');
 Route::post('/posts/create','PostsController@create');
 Route::get('/posts/confirm','PostsController@createConfirm');
 
@@ -40,8 +38,10 @@ Route::get('/upload','PostsController@upload');
 Route::post('/import','PostsController@import');
 Route::get('/download','PostsController@export');
 
-Route::get('/news','NewsController@index')->name('news');
+Route::get('/news','NewsController@index');
 Route::delete('/news/delete/{id}','NewsController@delete');
 
-Route::get('/news/create','NewsController@add');
+Route::get('/news/create','NewsController@showCreate');
 Route::get('/news/confirm','NewsController@createConfirm');
+
+Route::get('/news/search', 'NewsController@search');

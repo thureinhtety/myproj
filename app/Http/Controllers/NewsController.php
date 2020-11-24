@@ -2,34 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\News;
 use Illuminate\Http\Request;
-use App\Contracts\Services\News\NewsServiceInterface;
+use App\Contracts\Services\Users\UsersServiceInterface;
 
 class NewsController extends Controller
 {
-    public function __construct(NewsServiceInterface $newsService)
+    /**
+     * Constructor
+     * 
+     * @param UsersServiceInterface $usersService
+     */
+    public function __construct(UsersServiceInterface $usersService)
     {
-        $this->newsService = $newsService;
+        $this->usersService = $usersService;
     }
+
+    /**
+     * Show users list
+     * 
+     * @return Illuminate\Http\Respond;
+     */
     public function index()
     {
-        $data = $this->newsService->getNewsList();
+        $data = $this->usersService->getUsersList();
         return view('news.news', ['news' => $data]);
     }
 
+    /**
+     * delete user
+     * 
+     * @param [type] id
+     */
     public function delete($id)
     {
-        $this->newsService->delete($id);
+        $this->usersService->delete($id);
         return back();
     }
-    
-    public function add()
+
+    public function showCreate()
     {
         return view('news.newscreate');
     }
     public function createConfirm()
     {
         return view('news.newscreateconfirm');
+    }
+
+    /**
+     * search users
+     */
+    public function search()
+    {
+        $search = $this->usersService->search();
+        return view('news.news', ['news' => $search]);
     }
 }

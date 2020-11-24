@@ -2,60 +2,90 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\PostsExport;
-use Illuminate\Support\Facades\Auth;
-
-use App\Posts;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use App\Imports\PostsImport;
-use Excel;
-use Illuminate\Support\Facades\App;
-use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
-use App\User;
-use PhpOffice\PhpSpreadsheet\Chart\Title;
 use App\Contracts\Services\Posts\PostsServiceInterface;
 use Illuminate\Support\Facades\Validator;
-
-use function GuzzleHttp\Promise\all;
+use Illuminate\Support\Facades\Session;
+use App\Posts;
 
 class PostsController extends Controller
 {
+    /**
+     * Constructor
+     */
     public function __construct(PostsServiceInterface $postsService)
     {
         $this->postsService = $postsService;
     }
+
+    /**
+     * Show post lists
+     * 
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $data = $this->postsService->getPostsList();
-
-        return view('home', ['posts' => $data,]);
+        return view('home', ['posts' => $data]);
     }
 
+    /**
+     * delete post
+     * 
+     * @param [type] id
+     */
     public function delete($id)
     {
         $this->postsService->delete($id);
         return redirect('home');
     }
 
-    public function add()
+    /**
+     * show create post page
+     * 
+     * @return void
+     */
+    public function showCreate()
     {
         return view('posts.postcreate');
     }
+
+    /**
+     * create post
+     * 
+     * @return void
+     */
     public function create()
     {
         $this->postsService->create();
-        return redirect('home');
+        return redirect('home')->withInput();
     }
+
+    /**
+     * show confirm create post page
+     * 
+     * @param Request $request
+     */
     public function createConfirm(Request $request)
     {
         $validator = $this->validatePosts($request);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        $postconfirm = $this->postsService->createConfirm($request);
+        $postconfirm = new Posts();
+        $postconfirm->title = $request->title;
+        $postconfirm->description = $request->description;
+        Session::put('title', $postconfirm->title);
+        Session::put('description', $postconfirm->description);
+        $request->flash();
         return view('posts.postcreateconfirm', compact('postconfirm'));
     }
+
+    /**
+     * validate create post
+     * 
+     * @param Request $request
+     */
     public function validatePosts(Request $request)
     {
         $rule = [
@@ -65,16 +95,34 @@ class PostsController extends Controller
         return Validator::make($request->all(), $rule);
     }
 
+    /**
+     * show update post page
+     * 
+     * @param [type] id
+     */
     public function edit($id)
     {
         $data = $this->postsService->edit($id);
         return view('posts.postedit', ['post' => $data]);
     }
+
+    /**
+     * update post
+     * 
+     * @param [type] id
+     * @return void
+     */
     public function update($id)
     {
         $this->postsService->update($id);
         return redirect('home');
     }
+
+    /**
+     * show confirm update post page
+     * 
+     * @param Request $request, [type] id
+     */
     public function updateConfirm(Request $request, $id)
     {
         $validator = $this->validateUpdate($request);
@@ -84,6 +132,10 @@ class PostsController extends Controller
         $postconfirm = $this->postsService->updateConfirm($request, $id);
         return view('posts.posteditconfirm', compact('postconfirm'));
     }
+
+    /**
+     * validate update post
+     */
     public function validateUpdate(Request $request)
     {
         $rule = [
@@ -93,25 +145,43 @@ class PostsController extends Controller
         return Validator::make($request->all(), $rule);
     }
 
+    /**
+     * search post
+     */
     public function search()
     {
         $search = $this->postsService->search();
         return view('home', ['posts' => $search]);
     }
 
+    /**
+     * show import page
+     * 
+     * @return void
+     */
     public function upload()
     {
         return view('fileupload');
     }
+
+    /**
+     * import file
+     * 
+     * @param Request $request
+     */
     public function import(Request $request)
     {
         $validator = $this->validateImport($request);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
         $this->postsService->import($request);
         return redirect('home');
     }
+
+    /**
+     * validate import file
+     */
     public function validateImport(Request $request)
     {
         $rules = [
@@ -120,6 +190,11 @@ class PostsController extends Controller
         return Validator::make($request->all(), $rules);
     }
 
+    /**
+     * export file
+     * 
+     * @return void
+     */
     public function export()
     {
         return  $this->postsService->export();

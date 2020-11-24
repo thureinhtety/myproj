@@ -5,15 +5,15 @@
     <form method="get" action="{{ url("/posts/update/$post->id") }}">
         @csrf
         <div class="form-group">
-            <label>Title</label>
-            <input type="text" name="title" class="form-control input @error('title') is-danger @enderror" value="{{$post->title}}">
+            <label>Title</label><span class="required text-danger">*</span>
+            <input type="text" name="title" id="title" class="col-sm-5 form-control input @error('title') is-danger @enderror" value="{{$post->title}}">
             @error('title')
             <p class="help is-danger">{{$errors->first('title')}}</p>
             @enderror
         </div>
         <div class="form-group">
-            <label>Description</label>
-            <textarea name="description" class="form-control input @error('description') is-danger @enderror">{{$post->description}}</textarea>
+            <label>Description</label><span class="required text-danger">*</span>
+            <textarea name="description" id="description" class="col-sm-5 form-control input @error('description') is-danger @enderror">{{$post->description}}</textarea>
             @error('description')
             <p class="help is-danger">{{$errors->first('description')}}</p>
             @enderror
@@ -23,8 +23,14 @@
             <input type="checkbox" name="status" value="{{$post->status}}" <?php echo ($post->status) == 1 ? 'checked' : ''; ?>>
         </div>
         <input type="submit" value="Confirm" class="btn btn-primary">
-        <input type="reset" value="Clear" class="btn btn-primary">
+        <a href="#" class="btn btn-primary" role="button" onclick="remove()">Clear</a>
     </form>
 </div>
+<script>
+    function remove() {
+        document.getElementById('title').value = '';
+        document.getElementById('description').value = '';
+    }
+</script>
 
 @endsection

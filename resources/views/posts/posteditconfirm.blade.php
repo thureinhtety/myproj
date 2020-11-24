@@ -14,9 +14,8 @@
         <div class="form-group">
             <label>Status &nbsp; </label><input type="checkbox" name="status" value="{{ $postconfirm->status }}" <?php echo ($postconfirm->status)==1 ? 'checked' : '' ;?>>
         </div>
-
         <input type="submit" value="Update" class="btn btn-primary">
-        <a class="btn btn-primary" href="/posts/update/$postconfirm->id" role="button">Cancel</a>
+        <a class="btn btn-primary" href="{{url("/posts/edit/$postconfirm->id")}}" role="button">Cancel</a>
     </form>
 </div>
 @endsection
