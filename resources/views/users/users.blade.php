@@ -6,13 +6,15 @@
         <div class="col-md-15">
             <h2>User List</h2>
             <div class="mb-2">
-                <form action="{{url("/news/search")}}" method="GET">
+                <form action="{{url('/users/search')}}" method="GET">
                     <input type="text" name="name" class="mr-3" placeholder="Name">
                     <input type="text" name="email" class="mr-3" placeholder="Email">
                     <input type="text" name="created_from" class="mr-3" placeholder="Created From">
                     <input type="text" name="created_to" class="mr-3" placeholder="Created To">
                     <input type="submit" value="Search" class="btn btn-primary mr-3">
-                    <a class="btn btn-primary mr-3" href="/news/create" role="button">Add</a>
+                    @auth
+                    <a class="btn btn-primary mr-3" href="/users/create" role="button">Add</a>
+                    @endauth
                 </form>
             </div>
             <table class="table table-bordered">
@@ -26,7 +28,9 @@
                         <th scope="col">Address</th>
                         <th scope="col">Created Date</th>
                         <th scope="col">Updated Date</th>
+                        @auth
                         <th scope="col"></th>
+                        @endauth
                     </tr>
                 </thead>
                 <tbody>
@@ -46,13 +50,15 @@
                         <td>{{$new->address}}</td>
                         <td>{{$new->created_at}}</td>
                         <td>{{$new->updated_at}}</td>
+                        @auth
                         <td>
-                            <form method="post" onsubmit="return confirm('Are you sure to delete this post?')" action="{{ url("/news/delete/$new->id") }}">
+                            <form method="post" onsubmit="return confirm('Are you sure to delete this post?')" action="{{ url('/users/delete/'.$new->id) }}">
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </td>
+                        @endauth
                     </tr>
                     @endforeach
                 </tbody>

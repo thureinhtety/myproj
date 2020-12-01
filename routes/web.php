@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -38,10 +38,20 @@ Route::get('/upload','PostsController@upload');
 Route::post('/import','PostsController@import');
 Route::get('/download','PostsController@export');
 
-Route::get('/news','NewsController@index');
-Route::delete('/news/delete/{id}','NewsController@delete');
+Route::get('/users','NewsController@index');
+Route::delete('/users/delete/{id}','NewsController@delete');
 
-Route::get('/news/create','NewsController@showCreate');
-Route::get('/news/confirm','NewsController@createConfirm');
+Route::get('/users/create','NewsController@showCreate');
+Route::post('/users/confirmation','NewsController@confirmation');
+Route::post('/users/create','NewsController@create');
 
-Route::get('/news/search', 'NewsController@search');
+Route::get('/users/search', 'NewsController@search');
+
+Route::get('/users/profile/{id}','NewsController@showProfile');
+
+Route::get('/users/edit/{id}','NewsController@edit');
+Route::put('/users/update/{id}','NewsController@update');
+Route::post('/users/confirmation/{id}','NewsController@updateConfirm');
+
+Route::get('/change', 'PasswordController@changeView');
+Route::post('/changes', 'PasswordController@changePassword');

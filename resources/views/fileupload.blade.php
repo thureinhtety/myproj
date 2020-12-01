@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     <h2>Upload CSV File</h2>
-    <form method="post" action="{{url("/import")}}" class="border p-3" enctype="multipart/form-data">
+    <form method="post" action="{{url('/import')}}" class="border p-3" enctype="multipart/form-data">
         @csrf
         <div class="form-group col-md-6">
             <label for="exampleFormControlFile1">Import File Form :</label>

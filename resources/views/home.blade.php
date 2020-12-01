@@ -9,8 +9,10 @@
                 <form action="/posts" method="GET">
                     <input type="text" name="post" class="mr-4" required>
                     <input type="submit" value="Search" class="btn btn-primary mr-3">
+                    @auth
                     <a class="btn btn-primary mr-3" href="/posts/create" role="button">Add</a>
                     <a class="btn btn-primary mr-3" href="/upload" role="button">Upload</a>
+                    @endauth
                     <a class="btn btn-primary mr-3" href="/download" role="button">Download</a>
                 </form>
             </div>
@@ -21,8 +23,10 @@
                         <th scope="col">Post Description</th>
                         <th scope="col">Posted User</th>
                         <th scope="col">Posted Date</th>
+                        @auth
                         <th scope="col"></th>
                         <th scope="col"></th>
+                        @endauth
                     </tr>
                 </thead>
                 <tbody>
@@ -38,14 +42,16 @@
                         <td>{{$post->description}}</td>
                         <td>User-{{$post->create_user_id}}</td>
                         <td>{{$post->created_at}}</td>
-                        <td><a href="{{url("/posts/edit/$post->id")}}">Edit</a></td>
+                        @auth
+                        <td><a href="{{url('/posts/edit/'. $post->id)}}">Edit</a></td>
                         <td>
-                            <form method="post" onsubmit="return confirm('Are you sure to delete this post?')" action="{{ url("/posts/delete/$post->id") }}">
+                            <form method="post" onsubmit="return confirm('Are you sure to delete this post?')" action="{{ url('/posts/delete/'.$post->id) }}">
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </td>
+                        @endauth
                     </tr>
                     @endforeach
                 </tbody>
