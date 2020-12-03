@@ -9,6 +9,6 @@ class PostsApiDao implements PostsApiDaoInterface
 {
     public function postList()
     {
-        return Posts::all();
+        return Posts::with('user')->get();
     }
 }

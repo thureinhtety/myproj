@@ -24,3 +24,13 @@ Route::get('/test',function(){
 });
 
 Route::get('/post/list','API\PostsApiController@index');
+Route::post('/post','API\PostsApiController@create');
+Route::get('/post/{id}','API\PostsApiController@show');
+Route::put('/post/{id}','API\PostsApiController@update');
+Route::delete('/post/{id}','API\PostsApiController@delete');
+
+
+
+
+
+Route::get('/user/list','API\UserApiController@index');
