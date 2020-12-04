@@ -22,9 +22,9 @@ class PostsApiController extends Controller
      * 
      * @return postlist
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->postsApiService->postList();
+        return $this->postsApiService->postList($request);
     }
 
     /**

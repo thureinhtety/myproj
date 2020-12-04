@@ -4,5 +4,5 @@ namespace App\Contracts\Dao\Posts;
 
 interface PostsApiDaoInterface
 {
-    public function postList();
+    public function postList($request);
 }

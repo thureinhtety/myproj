@@ -4,5 +4,5 @@ namespace App\Contracts\Services\Posts;
 
 interface PostsApiServiceInterface
 {
-    public function postList();
+    public function postList($request);
 }

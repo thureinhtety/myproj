@@ -7,8 +7,19 @@ use App\Posts;
 
 class PostsApiDao implements PostsApiDaoInterface
 {
-    public function postList()
+    public function postList($request)
     {
-        return Posts::with('user')->get();
+        // if($request->search)
+        // {
+        //     return Posts::with('user')->where('title','=',$request->search)->get();
+        // }
+        // else
+        // {
+        //     return Posts::with('user')->get();
+        // }
+
+        return Posts::with('user')->when(request('search'),function($query){
+            $query->where('title','=',request('search'))->get();
+        })->get();
     }
 }
