@@ -17,20 +17,41 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/home', 'PostsController@index');
+Route::get('/posts', 'PostsController@search');
 
-Route::get('/create','PostsController@add');
-Route::post('/create','PostsController@create');
-Route::get('/confirm','PostsController@createConfirm');
+Route::get('/posts/create','PostsController@showCreate');
+Route::post('/posts/create','PostsController@create');
+Route::get('/posts/confirm','PostsController@createConfirm');
 
-Route::delete('/delete/{id}','PostsController@delete');
+Route::delete('/posts/delete/{id}','PostsController@delete');
 
-Route::get('/edit/{id}','PostsController@edit');
-Route::put('/update/{id}','PostsController@update');
-Route::get('/update/{id}','PostsController@updateConfirm');
+Route::get('/posts/edit/{id}','PostsController@edit');
+Route::put('/posts/update/{id}','PostsController@update');
+Route::get('/posts/update/{id}','PostsController@updateConfirm');
 
+Route::get('/upload','PostsController@upload');
+Route::post('/import','PostsController@import');
+Route::get('/download','PostsController@export');
 
+Route::get('/users','NewsController@index');
+Route::delete('/users/delete/{id}','NewsController@delete');
+
+Route::get('/users/create','NewsController@showCreate');
+Route::post('/users/confirmation','NewsController@confirmation');
+Route::post('/users/create','NewsController@create');
+
+Route::get('/users/search', 'NewsController@search');
+
+Route::get('/users/profile/{id}','NewsController@showProfile');
+
+Route::get('/users/edit/{id}','NewsController@edit');
+Route::put('/users/update/{id}','NewsController@update');
+Route::post('/users/confirmation/{id}','NewsController@updateConfirm');
+
+Route::get('/change', 'PasswordController@changeView');
+Route::post('/changes', 'PasswordController@changePassword');

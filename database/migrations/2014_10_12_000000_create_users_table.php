@@ -20,7 +20,16 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('profile');
+            $table->boolean('type')->default(1);
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->date('dob')->nullable();
+            $table->bigInteger('create_user_id')->default(1);
+            $table->bigInteger('updated_user_id')->default(1);
+            $table->bigInteger('deleted_user_id')->nullable();
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 
