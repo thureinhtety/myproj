@@ -18,8 +18,38 @@ class UsersApiService implements UsersApiServiceInterface
   {
     $this->usersApiDao = $usersApiDao;
   }
+
+  /**
+   * show user list
+   * 
+   * @return userList
+   */
   public function userList()
   {
-        return $this->usersApiDao->userList();
+    return $this->usersApiDao->userList();
+  }
+
+  /**
+   * create user
+   */
+  public function create($request)
+  {
+    return $this->usersApiDao->create($request);
+  }
+
+  /**
+   * update user
+   */
+  public function update($request, $id)
+  {
+    return $this->usersApiDao->update($request,$id);
+  }
+
+  /**
+   * delete user
+   */
+  public function delete($id)
+  {
+    return $this->usersApiDao->delete($id);
   }
 }

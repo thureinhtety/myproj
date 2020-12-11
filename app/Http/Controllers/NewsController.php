@@ -94,7 +94,7 @@ class NewsController extends Controller
         Session::put('address', $userConfirm->address);
         Session::put('profile', $userConfirm->profile);
         $request->flash();
-        return view('news.newscreateconfirm', compact('userConfirm'));
+        return view('users.userscreateconfirm', compact('userConfirm'));
     }
 
     /**

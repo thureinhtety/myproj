@@ -20,8 +20,37 @@ class PostsApiService implements PostsApiServiceInterface
     $this->postsApiDao = $postsApiDao;
   }
 
+  /**
+   * show post list
+   * 
+   * @return postList
+   */
   public function postList()
   {
       return $this->postsApiDao->postList();
+  }
+
+  /**
+   * create post
+   */
+  public function create($request)
+  {
+    return $this->postsApiDao->create($request);
+  }
+
+  /**
+   * update post
+   */
+  public function update($request, $id)
+  {
+    return $this-> postsApiDao->update($request,$id);
+  }
+
+  /**
+   * delete post
+   */
+  public function delete($id)
+  {
+    return $this->postsApiDao->delete($id);
   }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Contracts\Services\Posts\PostsApiServiceInterface;
 use App\Posts;
 use Illuminate\Http\Request;
+use App\Http\Requests\PostCreateRequest;
+use App\Http\Requests\PostUpdateRequest;
 
 class PostsApiController extends Controller
 {
@@ -32,26 +34,19 @@ class PostsApiController extends Controller
      * 
      * @param Request $request
      */
-    public function create(Request $request)
+    public function create(PostCreateRequest $request)
     {
-        $post = new Posts();
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->create_user_id = $request->create_user_id;
-        $post->updated_user_id = $request->updated_user_id;
-        $post->save();
-        return $post;
-    }
+        // $request->validate([
+        //     'title'=>'required',
+        //     'description'=>'required'
+        // ]);
+        // $post = new Posts();
+        // $post->title = $request->title;
+        // $post->description = $request->description;
+        // $post->create_user_id = $request->create_user_id;
+        // $post->updated_user_id = $request->updated_user_id;
 
-    /**
-     * show post detail
-     * 
-     * @param [Type] id
-     */
-    public function show($id)
-    {
-        $post = Posts::find($id);
-        return $post;
+        return $this->postsApiService->create($request);
     }
 
     /**
@@ -59,15 +54,9 @@ class PostsApiController extends Controller
      * 
      * @param Request $request, [Type] id
      */
-    public function update(Request $request,$id)
+    public function update(PostUpdateRequest $request,$id)
     {
-        $post = Posts::find($id);
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->create_user_id = $request->create_user_id;
-        $post->updated_user_id = $request->updated_user_id;
-        $post->save();
-        return $post;
+        return $this->postsApiService->update($request,$id);
     }
 
     /**
@@ -77,7 +66,6 @@ class PostsApiController extends Controller
      */
     public function delete($id)
     {
-        $post = Posts::find($id)->delete();
-        return $post;
+        return $this->postsApiService->delete($id);
     }
 }
